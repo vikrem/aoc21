@@ -1,0 +1,15 @@
+name:                aoc21
+version:             0.1.0.0
+github:              "vikrem/aoc21"
+license:             GPL
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on GitHub at <https://github.com/vikrem/aoc21#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+
+library:
+  source-dirs: .
