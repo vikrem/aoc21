@@ -20,7 +20,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Day1
   other-modules:
       Paths_aoc21
   hs-source-dirs:
