@@ -31,23 +31,26 @@ day2 inputFile = do
 solve :: (a -> b -> b) -> [a] -> b -> b
 solve match xs = appEndo . getDual $ mconcat $ map (Dual . Endo . match) xs
 
+ri :: String -> Int
+ri = read
+
 -- Transforms for part 1
 match1 :: [String] -> Submarine -> Submarine
 match1 ["forward", n] s@Submarine {..} =
-  s { position = position + read @Int n }
+  s { position = position + ri n }
 match1 ["down", n] s@Submarine {..} =
-  s { depth = depth + read @Int n }
+  s { depth = depth + ri n }
 match1 ["up", n] s@Submarine {..} =
-  s { depth = depth - read @Int n }
+  s { depth = depth - ri n }
 match1 _ s = s
 
 -- Transforms for part 2
 match2 :: [String] -> Submarine -> Submarine
 match2 ["forward", n] s@Submarine {..} =
-  let i = read @Int n
+  let i = ri n
    in s { position = position + i , depth = depth + aim * i}
 match2 ["down", n] s@Submarine {..} =
-  s { aim = aim + read @Int n }
+  s { aim = aim + ri n }
 match2 ["up", n] s@Submarine {..} =
-  s { aim = aim - read @Int n }
+  s { aim = aim - ri n }
 match2 _ s = s
