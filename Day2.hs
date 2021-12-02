@@ -41,9 +41,7 @@ match1 _ s = s
 
 -- Transforms for part 2
 match2 :: [String] -> Submarine -> Submarine
-match2 ["forward", n] s@Submarine {..} =
-  let i = ri n
-   in s { position = position + i , depth = depth + aim * i}
+match2 ["forward", n] s@Submarine {..} = s { position = position + ri n , depth = depth + aim * ri n}
 match2 ["down", n] s@Submarine {..} = s { aim = aim + ri n }
 match2 ["up", n] s@Submarine {..} = s { aim = aim - ri n }
 match2 _ s = s
