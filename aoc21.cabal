@@ -22,6 +22,7 @@ library
   exposed-modules:
       Day1
       Day2
+      Day3
   other-modules:
       Paths_aoc21
   hs-source-dirs:
