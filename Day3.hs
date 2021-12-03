@@ -1,7 +1,7 @@
 module Day3 where
 
-import Control.Applicative (ZipList (ZipList, getZipList))
 import Data.Foldable (Foldable (foldl'))
+import Data.List (transpose)
 
 day3 :: FilePath -> IO ()
 day3 inputFile = do
@@ -28,9 +28,6 @@ solve2 xxs =
         cycler 0 (\x y -> not $ isMaj x y) xxs
       ]
 
-transpose :: [[b]] -> [[b]]
-transpose = getZipList . traverse ZipList
-
 cycler :: Int -> (Int -> Int -> Bool) -> [[Bool]] -> [Bool]
 cycler idx f xxs = case filter (\xs -> (xs !! idx) == desired) xxs of
   [] -> error "wtf"
@@ -47,7 +44,4 @@ isMaj :: (Ord a, Num a) => a -> a -> Bool
 isMaj h n = n * 2 >= h
 
 bitsToInt :: [Bool] -> Int
-bitsToInt = foldl' (\acc d -> acc * 2 + d) 0 . fmap btd
-  where
-    btd True = 1
-    btd _ = 0
+bitsToInt = foldl' (\acc d -> acc * 2 + if d then 1 else 0) 0
