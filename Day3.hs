@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 module Day3 where
 
 import Control.Applicative (ZipList (ZipList, getZipList))
