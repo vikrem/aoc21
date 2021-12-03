@@ -27,7 +27,7 @@ solve2 xxs =
     fmap
       bitsToInt
       [ cycler 0 isMaj xxs,
-        cycler 0 ((not .) . isMaj) xxs
+        cycler 0 (\x y -> not $ isMaj x y) xxs
       ]
 
 transpose :: [[b]] -> [[b]]
