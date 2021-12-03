@@ -9,11 +9,11 @@ day3 :: FilePath -> IO ()
 day3 inputFile = do
   content <- readFile inputFile
   let xs = fmap (== '1') <$> lines content
-  print $ solve xs
+  print $ solve1 xs
   print $ solve2 xs
 
-solve :: [[Bool]] -> Int
-solve xxs = bitsToInt a * bitsToInt b
+solve1 :: [[Bool]] -> Int
+solve1 xxs = bitsToInt a * bitsToInt b
   where
     tsp = transpose xxs
     n = length xxs
