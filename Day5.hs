@@ -5,7 +5,7 @@ module Day5 where
 import Control.Applicative (ZipList (ZipList, getZipList))
 import Data.Char (digitToInt)
 import Data.Foldable (foldl')
-import Data.List (group, groupBy, sort)
+import Data.List (group, sort)
 import Text.Parsec hiding (Line)
 import Text.Parsec.String
 
@@ -19,7 +19,6 @@ day5 inputFile = do
   let inputLines = lines content
   let parses = parse lineParser "day5" <$> inputLines
   let (Right parsed) = sequenceA parses
-  print $ lineToPoints True <$> parsed
   print $ solve (lineToPoints False) parsed
   print $ solve (lineToPoints True) parsed
 
