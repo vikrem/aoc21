@@ -1,13 +1,10 @@
-{-# LANGUAGE TypeApplications #-}
 {-# LANGUAGE TupleSections #-}
 
 module Day4 where
 
-import Data.Foldable (find)
 import qualified Data.IntSet as IS
-import Data.List (transpose)
-import Data.Maybe (catMaybes)
-import Data.Traversable (mapAccumR, mapAccumL)
+import Data.List (partition, transpose)
+import Data.Traversable (mapAccumL)
 
 type Board = [[Int]]
 
@@ -29,14 +26,18 @@ splitWhen p s = case dropWhile p s of
     where
       (w, s'') = break p s'
 
---solve :: [Int] -> [Board] -> [IS.IntSet]
-solve :: [Int] -> [Board] -> Int
-solve bingoes boards = unmarkedSum is winner * (bingoes !! (idx - 1))
+solve :: [Int] -> [Board] -> [Int]
+solve [] boards = []
+solve bingoes boards = solveBingo bingoSetList boards
   where
     (final, accum) = mapAccumL (\mp x -> (IS.insert x mp, mp)) IS.empty bingoes
-    bingoSetList = accum <> [final]
-    bingoSetListIdxed = zip [0..] bingoSetList
-    (idx, is, winner) = head . catMaybes $ fmap (\(idx, is) -> fmap (idx, is, ) $ find (isBingoWinner is) boards) bingoSetListIdxed 
+    bingoSetList = zip bingoes $ tail $ accum <> [final]
+
+solveBingo :: [(Int, IS.IntSet)] -> [Board] -> [Int]
+solveBingo [] bss = []
+solveBingo ((call, is) : iss) bss =
+  let (winners, losers) = partition (isBingoWinner is) bss
+   in map (\w -> call * unmarkedSum is w) winners <> solveBingo iss losers
 
 isBingoWinner :: IS.IntSet -> Board -> Bool
 isBingoWinner is b = any match b || any match (transpose b)
@@ -46,5 +47,5 @@ isBingoWinner is b = any match b || any match (transpose b)
 unmarkedSum :: IS.IntSet -> Board -> Int
 unmarkedSum is b = sum $ IS.toList $ IS.difference (IS.fromList $ mconcat b) is
 
-isPred :: (a -> Bool) -> [a] -> [Maybe a]
-isPred p = fmap (\x -> if p x then Just x else Nothing)
+winnersPerBingo :: [(Int, IS.IntSet)] -> [Board] -> [(Int, IS.IntSet, [Board])]
+winnersPerBingo calls bs = fmap (\(c, is) -> (c,is,) $ filter (isBingoWinner is) bs) calls
