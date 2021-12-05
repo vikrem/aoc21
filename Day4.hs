@@ -14,7 +14,9 @@ day4 inputFile = do
   let inputLines = lines content
   let bingoes = fmap ri $ splitWhen (== ',') $ head inputLines
   let boards = splitWhen (== []) $ fmap (fmap ri . words) $ tail inputLines
-  print $ solve bingoes boards
+  let solns = solve bingoes boards
+  print $ head solns
+  print $ last solns
 
 ri :: String -> Int
 ri = read
@@ -28,24 +30,17 @@ splitWhen p s = case dropWhile p s of
 
 solve :: [Int] -> [Board] -> [Int]
 solve [] boards = []
-solve bingoes boards = solveBingo bingoSetList boards
+solve (b:bg) boards = fmap (\x -> b * unmarkedSum x) winners <> solve bg losers
   where
-    (final, accum) = mapAccumL (\mp x -> (IS.insert x mp, mp)) IS.empty bingoes
-    bingoSetList = zip bingoes $ tail $ accum <> [final]
+    (winners, losers) = partition isBingoWinner (map (wipeBoard b) boards)
 
-solveBingo :: [(Int, IS.IntSet)] -> [Board] -> [Int]
-solveBingo [] bss = []
-solveBingo ((call, is) : iss) bss =
-  let (winners, losers) = partition (isBingoWinner is) bss
-   in map (\w -> call * unmarkedSum is w) winners <> solveBingo iss losers
+wipeBoard :: Int -> Board -> Board
+wipeBoard c = fmap (fmap (\x -> if x == c then -1 else x))
 
-isBingoWinner :: IS.IntSet -> Board -> Bool
-isBingoWinner is b = any match b || any match (transpose b)
+isBingoWinner :: Board -> Bool
+isBingoWinner b = any match b || any match (transpose b)
   where
-    match row = IS.isSubsetOf (IS.fromList row) is
+    match = all (== -1)
 
-unmarkedSum :: IS.IntSet -> Board -> Int
-unmarkedSum is b = sum $ IS.toList $ IS.difference (IS.fromList $ mconcat b) is
-
-winnersPerBingo :: [(Int, IS.IntSet)] -> [Board] -> [(Int, IS.IntSet, [Board])]
-winnersPerBingo calls bs = fmap (\(c, is) -> (c,is,) $ filter (isBingoWinner is) bs) calls
+unmarkedSum :: Board -> Int
+unmarkedSum = sum . filter (/= -1). mconcat
