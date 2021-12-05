@@ -1,5 +1,3 @@
-{-# LANGUAGE TupleSections #-}
-
 module Day4 where
 
 import qualified Data.IntSet as IS
