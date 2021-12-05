@@ -52,4 +52,4 @@ lineToPoints diag ((x1, y1), (x2, y2))
   | otherwise = []
 
 solve :: (Line -> [Point]) -> [Line] -> Int
-solve f lx = length $ filter (>= 2) $ fmap length $ group $ sort $ concatMap f lx
+solve f = length . filter (>= 2) . fmap length . group . sort . concatMap f
