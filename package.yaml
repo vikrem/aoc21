@@ -11,6 +11,7 @@ description:         Please see the README on GitHub at <https://github.com/vikr
 dependencies:
 - base >= 4.7 && < 5
 - containers
+- parsec
 
 library:
   source-dirs: .
