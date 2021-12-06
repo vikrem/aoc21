@@ -3,6 +3,7 @@ module Day4 where
 import qualified Data.IntSet as IS
 import Data.List (partition, transpose)
 import Data.Traversable (mapAccumL)
+import Util ( splitWhen )
 
 type Board = [[Int]]
 
@@ -19,12 +20,6 @@ day4 inputFile = do
 ri :: String -> Int
 ri = read
 
-splitWhen :: (x -> Bool) -> [x] -> [[x]]
-splitWhen p s = case dropWhile p s of
-  [] -> []
-  s' -> w : splitWhen p s''
-    where
-      (w, s'') = break p s'
 
 solve :: [Int] -> [Board] -> [Int]
 solve [] boards = []
