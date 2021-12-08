@@ -17,8 +17,4 @@ solve line =
       )
       line
   where
-    include 2 = True
-    include 3 = True
-    include 4 = True
-    include 7 = True
-    include _ = False
+    include = (`elem` [2,3,4,7])
